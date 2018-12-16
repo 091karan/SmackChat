@@ -1,9 +1,11 @@
-package com.karan.android.smack
+package com.karan.android.smack.controller
 
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.karan.android.smack.R
+import com.karan.android.smack.services.AuthService
 import kotlinx.android.synthetic.main.activity_create_user.*
 import java.util.*
 
@@ -17,9 +19,6 @@ class CreateUserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_user)
     }
 
-    fun createUserCreateUserBtnClicked(view: View){
-
-    }
 
     fun generateBackgroundColor(view: View){
         val random = Random()
@@ -50,4 +49,12 @@ class CreateUserActivity : AppCompatActivity() {
         }
         createUserUserAvatar.setImageResource(this.resources.getIdentifier(userAvatar,"drawable",this.packageName))
     }
+
+
+    fun createUserCreateUserBtnClicked(view: View){
+        AuthService.registerUser(this,"karan@technfinity.com","123456"){
+            
+        }
+    }
+
 }
