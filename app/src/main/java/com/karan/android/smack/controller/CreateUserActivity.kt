@@ -52,8 +52,20 @@ class CreateUserActivity : AppCompatActivity() {
 
 
     fun createUserCreateUserBtnClicked(view: View){
-        AuthService.registerUser(this,"karan@technfinity.com","123456"){
-            
+        val email = createUserEmailTxt.text.toString()
+        val password = createUserPasswordTxt.text.toString()
+
+        AuthService.registerUser(this,"karan@technfinity.com","123456"){regsiterSuccess ->
+            if (regsiterSuccess){
+                AuthService.loginUser(this,email,password){loginSuccess ->
+                    if(loginSuccess){
+                        println("SUCCESS" + AuthService.authToken)
+                        println("SUCCESS" + AuthService.userEmail)
+                    }
+
+                }
+            }
+
         }
     }
 
