@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".CreateUserActivity">
+
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/createUserUserNameTxt" android:layout_marginTop="32dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent" android:hint="@string/user_name"
+            app:layout_constraintHorizontal_bias="0.503" android:inputType="textPersonName"
+            android:textColor="@android:color/darker_gray"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/createUserEmailTxt"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent" android:hint="@string/email"
+            app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/createUserUserNameTxt" android:textColor="@android:color/darker_gray"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/createUserPasswordTxt" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" app:layout_constraintHorizontal_bias="1.0"
+            android:hint="@string/password" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/createUserEmailTxt" android:textColor="@android:color/darker_gray"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:text="@string/tap_to_generate_user_avatar" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintHorizontal_bias="0.502"
+            android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/createUserPasswordTxt"/>
+    <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp" app:srcCompat="@drawable/profiledefault"
+            android:id="@+id/createUserUserAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/createUserGenerateBackgroundColor"
+            android:onClick="generateUserAvatar"
+            android:scaleType="centerCrop" android:contentDescription="@string/user_avatar_image"/>
+    <Button
+            android:text="@string/generate_background_color"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:id="@+id/createUserGenerateBackgroundColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="32dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="32dp" android:background="@color/colorPrimary"
+            android:textColor="@android:color/background_light" android:textStyle="bold"
+            android:textAlignment="center" android:onClick="generateBackgroundColor"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginBottom="84dp" app:layout_constraintBottom_toTopOf="@+id/CreateUserCreateUserBtn"/>
+    <Button
+            android:text="@string/create_user"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:id="@+id/CreateUserCreateUserBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="32dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="32dp" android:background="@color/colorPrimary"
+            android:textColor="@android:color/background_light" android:textStyle="bold"
+            android:textAlignment="center" android:onClick="createUserCreateUserBtnClicked"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
