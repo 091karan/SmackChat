@@ -16,17 +16,20 @@ import com.karan.android.smack.R
 import com.karan.android.smack.services.AuthService
 import com.karan.android.smack.services.UserDataService
 import com.karan.android.smack.utilities.BROADCAST_USER_DATA_CHANGE
+import com.karan.android.smack.utilities.SOCKET_URL
+import io.socket.client.IO
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity(){
 
+    val socket = IO.socket(SOCKET_URL)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        hideKeyboard()
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar,
@@ -36,8 +39,24 @@ class MainActivity : AppCompatActivity(){
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
+
+    }
+
+    override fun onResume() {
+        socket.connect()
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver, IntentFilter(
             BROADCAST_USER_DATA_CHANGE))
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        socket.disconnect()
+        super.onDestroy()
+    }
+
+    override fun onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
+        super.onPause()
     }
 
     private val userDataChangeReceiver = object : BroadcastReceiver(){
@@ -89,10 +108,8 @@ class MainActivity : AppCompatActivity(){
                     val channelDesc = descTxtField.text.toString()
 
                     //Create channel with the channel name and description
-                    hideKeyboard()
                 }
                 .setNegativeButton("Cancel"){ dialogInterface, i ->
-                    hideKeyboard()
                 }
                 .show()
 
