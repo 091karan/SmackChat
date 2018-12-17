@@ -64,7 +64,7 @@ class CreateUserActivity : AppCompatActivity() {
         val password = createUserPasswordTxt.text.toString()
 
         if(userName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()){
-            AuthService.registerUser(this,"karan@technfinity.com","123456"){regsiterSuccess ->
+            AuthService.registerUser(this,email,password){regsiterSuccess ->
                 if (regsiterSuccess){
                     AuthService.loginUser(this,email,password){loginSuccess ->
                         if(loginSuccess){
