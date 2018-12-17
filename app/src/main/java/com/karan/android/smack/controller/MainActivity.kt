@@ -13,11 +13,14 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.karan.android.smack.R
+import com.karan.android.smack.model.Channel
 import com.karan.android.smack.services.AuthService
+import com.karan.android.smack.services.MessageService
 import com.karan.android.smack.services.UserDataService
 import com.karan.android.smack.utilities.BROADCAST_USER_DATA_CHANGE
 import com.karan.android.smack.utilities.SOCKET_URL
 import io.socket.client.IO
+import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -39,11 +42,12 @@ class MainActivity : AppCompatActivity(){
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
+        socket.connect()
+        socket.on("channelCreated",onNewChannel)
 
     }
 
     override fun onResume() {
-        socket.connect()
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver, IntentFilter(
             BROADCAST_USER_DATA_CHANGE))
         super.onResume()
@@ -51,13 +55,10 @@ class MainActivity : AppCompatActivity(){
 
     override fun onDestroy() {
         socket.disconnect()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
         super.onDestroy()
     }
 
-    override fun onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
-        super.onPause()
-    }
 
     private val userDataChangeReceiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -108,6 +109,7 @@ class MainActivity : AppCompatActivity(){
                     val channelDesc = descTxtField.text.toString()
 
                     //Create channel with the channel name and description
+                    socket.emit("newChannel",channelName,channelDesc)
                 }
                 .setNegativeButton("Cancel"){ dialogInterface, i ->
                 }
@@ -118,6 +120,16 @@ class MainActivity : AppCompatActivity(){
 
     fun sendMsgBtnClicked(view: View){
 
+    }
+
+    private val onNewChannel = Emitter.Listener { args ->
+        runOnUiThread {
+            val channelName = args[0] as String
+            val channelDesc = args[1] as String
+            val channelId = args[2] as String
+            val newChannel = Channel(channelName,channelDesc,channelId)
+            MessageService.channelList.add(newChannel)
+        }
     }
 
     private fun hideKeyboard(){
