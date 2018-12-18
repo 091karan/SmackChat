@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.karan.android.smack.R
 import com.karan.android.smack.model.Channel
+import com.karan.android.smack.model.Message
 import com.karan.android.smack.services.AuthService
 import com.karan.android.smack.services.MessageService
 import com.karan.android.smack.services.UserDataService
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity(){
 
         socket.connect()
         socket.on("channelCreated",onNewChannel)
+        socket.on("messageCreated",onNewMesage)
 
         setUpAdapter()
 
@@ -156,7 +158,17 @@ class MainActivity : AppCompatActivity(){
     }
 
     fun sendMsgBtnClicked(view: View){
-
+        if(App.prefs.isLoggedIn && messageTextField.text.isNotEmpty() && selectedChannel != null){
+            socket.emit("newMessage",
+                messageTextField.text.toString(),
+                UserDataService.id,
+                selectedChannel?.id,
+                UserDataService.name,
+                UserDataService.avatarName,
+                UserDataService.avatarColor)
+            messageTextField.text.clear()
+            hideKeyboard()
+        }
     }
 
     private val onNewChannel = Emitter.Listener { args ->
@@ -167,6 +179,22 @@ class MainActivity : AppCompatActivity(){
             val newChannel = Channel(channelName,channelDesc,channelId)
             MessageService.channelList.add(newChannel)
             channelAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private val onNewMesage = Emitter.Listener { args ->
+        runOnUiThread {
+            val msgBody = args[0] as String
+            val channelId = args[2] as String
+            val userName = args[3] as String
+            val userAvatar = args[4] as String
+            val userAvatarColor = args[5] as String
+            val id = args[6] as String
+            val timeStamp = args[7] as String
+
+            val newMsg = Message(msgBody,channelId,userName,userAvatar,userAvatarColor,id,timeStamp)
+            MessageService.messageList.add(newMsg)
+
         }
     }
 
