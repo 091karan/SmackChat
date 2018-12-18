@@ -62,6 +62,9 @@ class MainActivity : AppCompatActivity(){
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver, IntentFilter(
+            BROADCAST_USER_DATA_CHANGE))
+
         if (App.prefs.isLoggedIn){
             AuthService.findUserByEmail(this){}
         }
@@ -80,12 +83,6 @@ class MainActivity : AppCompatActivity(){
 
     }
 
-    override fun onResume() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver, IntentFilter(
-            BROADCAST_USER_DATA_CHANGE))
-        super.onResume()
-    }
-
     override fun onDestroy() {
         socket.disconnect()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
@@ -101,6 +98,7 @@ class MainActivity : AppCompatActivity(){
                 userImageNavHeader.setImageResource(resources.getIdentifier(UserDataService.avatarName,"drawable",packageName))
                 userImageNavHeader.setBackgroundColor(UserDataService.returnAvatarColor(UserDataService.avatarColor))
                 loginBtnNavHeader.text = "Log Out"
+                mainChannelName.text = "Please Log in"
 
                 MessageService.getChannels{complete ->
                     if(complete){
