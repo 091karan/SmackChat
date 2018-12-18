@@ -1,7 +1,7 @@
 package com.karan.android.smack.services
 
 import android.graphics.Color
-import android.text.TextUtils.replace
+import com.karan.android.smack.controller.App
 import java.util.*
 
 object UserDataService {
@@ -18,9 +18,9 @@ object UserDataService {
         avatarName = ""
         avatarColor = ""
         id = ""
-        AuthService.authToken = ""
-        AuthService.isLoggedIn = false
-        AuthService.userEmail = ""
+        App.prefs.authToken = ""
+        App.prefs.isLoggedIn = false
+        App.prefs.userEmail = ""
     }
 
 
@@ -37,7 +37,7 @@ object UserDataService {
         var g = 0
         var b = 0
 
-        var scanner = Scanner(strippedColor)
+        val scanner = Scanner(strippedColor)
         if(scanner.hasNext()){
             r = (scanner.nextDouble() * 255).toInt()
             g = (scanner.nextDouble() * 255).toInt()
