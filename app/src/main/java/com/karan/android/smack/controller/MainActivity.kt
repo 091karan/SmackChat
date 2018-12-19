@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -32,13 +31,13 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity(){
 
-    val socket = IO.socket(SOCKET_URL)
+    private val socket = IO.socket(SOCKET_URL)
     lateinit var channelAdapter : ArrayAdapter<Channel>
-    lateinit var messageAdapter: MessageAdapter
+    private lateinit var messageAdapter: MessageAdapter
     var selectedChannel: Channel? = null
 
     private fun setUpAdapter(){
-        channelAdapter = ArrayAdapter<Channel>(this,android.R.layout.simple_list_item_1,MessageService.channelList)
+        channelAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,MessageService.channelList)
         channelList.adapter = channelAdapter
 
         messageAdapter = MessageAdapter(this,MessageService.messageList)
@@ -46,13 +45,15 @@ class MainActivity : AppCompatActivity(){
         val layoutManager = LinearLayoutManager(this)
         messageListView.layoutManager = layoutManager
 
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        socket.connect()
+        socket.on("channelCreated",onNewChannel)
+        socket.on("messageCreated",onNewMesage)
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar,
@@ -62,18 +63,10 @@ class MainActivity : AppCompatActivity(){
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
+        setUpAdapter()
+
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver, IntentFilter(
             BROADCAST_USER_DATA_CHANGE))
-
-        if (App.prefs.isLoggedIn){
-            AuthService.findUserByEmail(this){}
-        }
-
-        socket.connect()
-        socket.on("channelCreated",onNewChannel)
-        socket.on("messageCreated",onNewMesage)
-
-        setUpAdapter()
 
         channelList.setOnItemClickListener { _, _, i, _ ->
             selectedChannel = MessageService.channelList[i]
@@ -81,7 +74,16 @@ class MainActivity : AppCompatActivity(){
             updateWithChannel()
         }
 
+        if (App.prefs.isLoggedIn){
+            AuthService.findUserByEmail(this){}
+        }
+
+        userNameNavHeader.text = ""
+        userImageNavHeader.setImageResource(R.drawable.profiledefault)
+        userEmailNavHeader.text = ""
+        loginBtnNavHeader.text = "Login"
     }
+
 
     override fun onDestroy() {
         socket.disconnect()
@@ -92,13 +94,13 @@ class MainActivity : AppCompatActivity(){
 
     private val userDataChangeReceiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context, intent: Intent?) {
+
             if(App.prefs.isLoggedIn){
                 userNameNavHeader.text = UserDataService.name
                 userEmailNavHeader.text = UserDataService.email
                 userImageNavHeader.setImageResource(resources.getIdentifier(UserDataService.avatarName,"drawable",packageName))
                 userImageNavHeader.setBackgroundColor(UserDataService.returnAvatarColor(UserDataService.avatarColor))
-                loginBtnNavHeader.text = "Log Out"
-                mainChannelName.text = "Please Log in"
+                loginBtnNavHeader.text = "Log out"
 
                 MessageService.getChannels{complete ->
                     if(complete){
@@ -115,9 +117,10 @@ class MainActivity : AppCompatActivity(){
     }
 
     fun updateWithChannel(){
-        mainChannelName.text = "#${selectedChannel?.name}"
+        val channelName = "#${selectedChannel?.name}"
+        mainChannelName.text = channelName
         // Pull down the messages which are specific to the channel
-        if (selectedChannel!= null){
+        if (selectedChannel != null){
             MessageService.getMessages(selectedChannel!!.id){complete ->
                 if(complete){
                     messageAdapter.notifyDataSetChanged()
@@ -125,7 +128,6 @@ class MainActivity : AppCompatActivity(){
                         messageListView.smoothScrollToPosition(messageAdapter.itemCount - 1)
                     }
                 }
-
             }
         }
     }
@@ -149,6 +151,7 @@ class MainActivity : AppCompatActivity(){
             userImageNavHeader.setImageResource(R.drawable.profiledefault)
             userImageNavHeader.setBackgroundColor(Color.TRANSPARENT)
             loginBtnNavHeader.text = "Log In"
+            mainChannelName.text = "Please Log In"
         }
         else{
             val intent = Intent(this, LoginActivity::class.java)
@@ -161,7 +164,7 @@ class MainActivity : AppCompatActivity(){
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.add_channel_dialog,null)
             builder.setView(dialogView)
-                .setPositiveButton("Add"){ dialogInterface, i ->
+                .setPositiveButton("Add"){ _, _ ->
                     val nameTxtField = dialogView.findViewById<EditText>(R.id.addChannelNameTxt)
                     val descTxtField = dialogView.findViewById<EditText>(R.id.addChannelDescriptionTxt)
                     val channelName = nameTxtField.text.toString()
@@ -170,7 +173,7 @@ class MainActivity : AppCompatActivity(){
                     //Create channel with the channel name and description
                     socket.emit("newChannel",channelName,channelDesc)
                 }
-                .setNegativeButton("Cancel"){ dialogInterface, i ->
+                .setNegativeButton("Cancel"){ _, _ ->
                 }
                 .show()
 
@@ -229,7 +232,7 @@ class MainActivity : AppCompatActivity(){
         val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         if(inputManager.isAcceptingText){
-            inputManager.hideSoftInputFromWindow(currentFocus.windowToken,0)
+            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken,0)
         }
     }
 

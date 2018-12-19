@@ -6,12 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.karan.android.smack.R
 import com.karan.android.smack.model.Message
-import com.karan.android.smack.services.MessageService
 import com.karan.android.smack.services.UserDataService
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -34,21 +32,21 @@ class MessageAdapter(val context: Context, val messages: ArrayList<Message>) : R
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
-        val messageUserName = itemView.findViewById<TextView>(R.id.messageUserName)
-        val messageUserImage = itemView.findViewById<ImageView>(R.id.messageUserImage)
-        val messageTimeStamp = itemView.findViewById<TextView>(R.id.messageTimeStamp)
-        val messageBody = itemView.findViewById<TextView>(R.id.messageBody)
+        private val messageUserName = itemView.findViewById<TextView>(R.id.messageUserName)
+        private val messageUserImage = itemView.findViewById<ImageView>(R.id.messageUserImage)
+        private val messageTimeStamp = itemView.findViewById<TextView>(R.id.messageTimeStamp)
+        private val messageBody = itemView.findViewById<TextView>(R.id.messageBody)
 
         fun bindMessage(position: Int){
             val message = messages[position]
             messageUserName?.text = message.userName
             messageBody?.text = message.msgBody
-            messageTimeStamp?.text = message.timeStamp
+            messageTimeStamp?.text = returnDateString(message.timeStamp)
             messageUserImage?.setImageResource(context.resources.getIdentifier(message.userAvatar,"drawable",context.packageName))
             messageUserImage?.setBackgroundColor(UserDataService.returnAvatarColor(message.userAvatarColor))
         }
 
-        fun returnDateString(isoString: String): String{
+        private fun returnDateString(isoString: String): String{
             // 2018-12-18T16:08:54.858Z
 
             val isoFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.getDefault())

@@ -1,11 +1,9 @@
 package com.karan.android.smack.services
 
-import android.content.Context
 import android.util.Log
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.karan.android.smack.controller.App
-import com.karan.android.smack.controller.MainActivity
 import com.karan.android.smack.model.Channel
 import com.karan.android.smack.model.Message
 import com.karan.android.smack.utilities.URL_GET_ALL_MSGS
@@ -39,6 +37,9 @@ object MessageService {
             Log.d("Error","Couldn't get the channels: $error")
             complete(false)
         }) {
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String,String>()
                 headers.put("Authorization", "Bearer ${App.prefs.authToken}")
@@ -68,18 +69,22 @@ object MessageService {
 
                     val newMsg = Message(messageBody,channelId,userName,userAvatar,userAvatarColor,id,timeStamp)
                     this.messageList.add(newMsg)
+
                 }
+                complete(true)
 
             }catch (e: JSONException){
-                Log.d("Error","EXC: " + e.localizedMessage)
                 complete(false)
             }
 
 
         },Response.ErrorListener {error ->
-            Log.d("Error","Failed to collect all the messages for the channel: $error" )
             complete(false)
         }){
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String,String>()
                 headers.put("Authorization", "Bearer ${App.prefs.authToken}")

@@ -9,49 +9,63 @@
         android:gravity="bottom" android:id="@+id/ConstraintLayout" tools:layout_editor_absoluteY="81dp">
 
     <ImageView
+            android:id="@+id/userImageNavHeader"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="12dp"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:contentDescription="@string/nav_header_desc"
-            android:id="@+id/userImageNavHeader" app:srcCompat="@drawable/profiledefault"
+            app:layout_constraintBottom_toTopOf="@+id/loginBtnNavHeader"
             app:layout_constraintStart_toStartOf="parent"
-            android:scaleType="center"
-            app:layout_constraintBottom_toTopOf="@+id/loginBtnNavHeader"/>
+            app:srcCompat="@drawable/profiledefault" />
 
     <TextView
+            android:id="@+id/userNameNavHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:id="@+id/userNameNavHeader"
             app:layout_constraintStart_toEndOf="@+id/userImageNavHeader"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toTopOf="@+id/userImageNavHeader" tools:text="Karan Agarwal" android:text="Karan Agarwal"/>
+            app:layout_constraintTop_toTopOf="@+id/userImageNavHeader"
+            tools:text="JonnyB" />
 
     <TextView
+            android:id="@+id/userEmailNavHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/userEmailNavHeader"
-            app:layout_constraintStart_toEndOf="@+id/userImageNavHeader"
             android:layout_marginStart="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/userNameNavHeader" tools:text="091karan@gmail.com"
-            android:text="091karan@gmail.com"/>
+            android:layout_marginTop="0dp"
+            app:layout_constraintStart_toEndOf="@+id/userImageNavHeader"
+            app:layout_constraintTop_toBottomOf="@+id/userNameNavHeader"
+            tools:text="jonny@devslopes.com" />
+
     <Button
-            android:text="Login"
-            android:layout_width="78dp"
-            android:layout_height="29dp"
             android:id="@+id/loginBtnNavHeader"
-            android:textColor="@android:color/background_light"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:background="@android:color/transparent"
-            style="@style/Widget.AppCompat.Button.Small" android:onClick="loginBtnNavClicked"/>
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="4dp"
+            android:background="@android:color/transparent"
+            android:onClick="loginBtnNavClicked"
+            android:text="Login"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp" app:srcCompat="@drawable/addchannelbutton"
             android:id="@+id/addChannelBtn"
-            android:background="@android:color/transparent" android:scaleType="fitXY" android:layout_marginEnd="8dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:onClick="addChannelClicked"
+            android:padding="5dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
-            android:onClick="addChannelClicked"/>
+            app:srcCompat="@drawable/addchannelbutton" />
 
 </android.support.constraint.ConstraintLayout>

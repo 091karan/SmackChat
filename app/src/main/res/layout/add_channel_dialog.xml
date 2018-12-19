@@ -5,7 +5,7 @@
               android:layout_height="wrap_content">
 
     <TextView
-            android:text="Add Channel "
+            android:text="@string/add_channel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/textView3" android:textAlignment="center"
             android:layout_marginBottom="16dp" android:layout_marginTop="26dp" android:textSize="18sp"/>
@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/addChannelNameTxt" android:hint="channel name"
+            android:id="@+id/addChannelNameTxt" android:hint="@string/channel_name"
             android:textColor="@android:color/darker_gray" android:layout_marginLeft="18dp"
             android:layout_marginRight="18dp" android:layout_marginBottom="18dp"/>
     <EditText
@@ -22,6 +22,6 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/addChannelDescriptionTxt" android:hint="channel description"
+            android:id="@+id/addChannelDescriptionTxt" android:hint="@string/channel_description"
             android:layout_marginLeft="18dp" android:layout_marginRight="18dp" android:layout_marginBottom="18dp"/>
 </LinearLayout>

@@ -16,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        enableSpinner(false)
+        loginProgressBar.visibility = View.INVISIBLE
     }
 
     fun loginLoginBtnClicked(view: View){
@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    fun enableSpinner(enable: Boolean){
+    private fun enableSpinner(enable: Boolean){
         if(enable){
             loginProgressBar.visibility = View.VISIBLE
         }else{
@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
         val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         if(inputManager.isAcceptingText){
-            inputManager.hideSoftInputFromWindow(currentFocus.windowToken,0)
+            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken,0)
         }
     }
 

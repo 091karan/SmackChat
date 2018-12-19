@@ -16,7 +16,7 @@
             app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent" android:hint="@string/user_name"
             app:layout_constraintHorizontal_bias="0.503" android:inputType="textPersonName"
-            android:textColor="@android:color/darker_gray"/>
+            android:textColor="@android:color/darker_gray" />
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"

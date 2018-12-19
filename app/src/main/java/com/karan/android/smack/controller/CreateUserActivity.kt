@@ -11,13 +11,12 @@ import com.karan.android.smack.R
 import com.karan.android.smack.services.AuthService
 import com.karan.android.smack.utilities.BROADCAST_USER_DATA_CHANGE
 import kotlinx.android.synthetic.main.activity_create_user.*
-import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
 
 class CreateUserActivity : AppCompatActivity() {
 
-    var userAvatar = "profiledefault"
-    var avatarColor = "[0.5,0.5,0.5,1]"
+    private var userAvatar = "profiledefault"
+    private var avatarColor = "[0.5, 0.5, 0.5, 1]"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,22 +37,21 @@ class CreateUserActivity : AppCompatActivity() {
         val savedG = g.toDouble()/255
         val savedB = b.toDouble()/255
 
-        avatarColor = "[$savedR,$savedG,$savedB,1]"
+        avatarColor = "[$savedR, $savedG, $savedB, 1]"
 
     }
 
     fun generateUserAvatar(view: View){
         val random = Random()
-        var color = random.nextInt(2)
-        var avatar = random.nextInt(28)
+        val color = random.nextInt(2)
+        val avatar = random.nextInt(28)
 
-        if(color==0){
-            userAvatar = "light$avatar"
+        userAvatar = if(color==0){
+            "light$avatar"
+        } else{
+            "dark$avatar"
         }
-        else{
-            userAvatar = "dark$avatar"
-        }
-        createUserUserAvatar.setImageResource(this.resources.getIdentifier(userAvatar,"drawable",this.packageName))
+        createUserUserAvatar.setImageResource(resources.getIdentifier(userAvatar,"drawable",packageName))
     }
 
 
@@ -88,19 +86,19 @@ class CreateUserActivity : AppCompatActivity() {
             }
         }
         else{
-            Toast.makeText(this,"Make sure User Name, Email and Pasword are filled in",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"Make sure User Name, Email and Password are filled in",Toast.LENGTH_SHORT).show()
             enableSpinner(false)
         }
 
 
     }
 
-    fun errorToast(){
+    private fun errorToast(){
         Toast.makeText(this,"Something went wrong, please try again!",Toast.LENGTH_SHORT).show()
         enableSpinner(false)
     }
 
-    fun enableSpinner(enable: Boolean){
+    private fun enableSpinner(enable: Boolean){
         if(enable){
             createUserProgressBar.visibility = View.VISIBLE
         }

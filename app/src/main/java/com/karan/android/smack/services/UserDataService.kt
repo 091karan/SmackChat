@@ -31,7 +31,7 @@ object UserDataService {
         val strippedColor = components
                                 .replace("[","")
                                 .replace("]","")
-                                .replace(",","")
+                                .replace(","," ")
 
         //strippedColor = 0.00255265266 0.556562262 0.64538454554 1
 
@@ -45,9 +45,6 @@ object UserDataService {
             g = (scanner.nextDouble() * 255).toInt()
             b = (scanner.nextDouble() * 255).toInt()
         }
-
         return Color.rgb(r,g,b)
     }
-
-
 }

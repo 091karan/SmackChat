@@ -7,16 +7,11 @@ import android.util.Log
 import com.android.volley.Response
 import com.android.volley.toolbox.*
 import com.karan.android.smack.controller.App
-import com.karan.android.smack.services.UserDataService.name
 import com.karan.android.smack.utilities.*
 import org.json.JSONException
 import org.json.JSONObject
 
 object AuthService {
-
-//    var isLoggedIn = false
-//    var userEmail = ""
-//    var authToken = ""
 
     fun registerUser(email: String, password: String,complete: (Boolean) -> Unit){
 
@@ -143,18 +138,23 @@ object AuthService {
 
                 complete(true)
             }catch (e: JSONException){
-                Log.d("Error","ESC: ${e.localizedMessage}")
+                Log.e("Error","ESC: ${e.localizedMessage}")
                 complete(false)
             }
 
 
         },Response.ErrorListener {error ->
-            Log.d("Error","Couldn't find the user: $error")
+            Log.e("Error","Couldn't find the user: $error")
             complete(false)
         }) {
+
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String,String>()
-                headers.put("Authorization", App.prefs.authToken)
+                headers.put("Authorization", "Bearer ${App.prefs.authToken}")
                 return headers
             }
         }
